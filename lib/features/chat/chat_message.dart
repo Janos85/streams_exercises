@@ -3,6 +3,8 @@ class ChatMessage {
   final String message;
 
   ChatMessage({required this.user, required this.message});
+
+  get content => null;
 }
 
 List<ChatMessage> mockMessages = [

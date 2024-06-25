@@ -36,4 +36,6 @@ class ChatRepository {
     stopSendingMessages();
     _controller.close();
   }
+
+  getMessageStream() {}
 }

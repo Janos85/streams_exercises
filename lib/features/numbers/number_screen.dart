@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:streams_exercises/features/numbers/number_repository.dart';
 
-class NumberScreen extends StatefulWidget {
-  const NumberScreen({
+class NumberScreen extends StatelessWidget {
+  NumberScreen({
     super.key,
     required this.numberRepository,
   });
 
   final NumberRepository numberRepository;
 
-  @override
-  State<NumberScreen> createState() => _NumberScreenState();
-}
-
-class _NumberScreenState extends State<NumberScreen> {
   final Stream<int> numbers = NumberRepository().getNumberStream();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

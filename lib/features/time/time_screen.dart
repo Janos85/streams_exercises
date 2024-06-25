@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:streams_exercises/features/time/time_repository.dart';
 
 class TimeScreen extends StatelessWidget {
-  const TimeScreen({
+  TimeScreen({
     super.key,
     required this.timeRepository,
   });
 
   final TimeRepository timeRepository;
+  final Stream<DateTime> time = TimeRepository().dateTimeStream;
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +16,23 @@ class TimeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Time Screen'),
       ),
-      body: const Center(
-        child: Text("Hier soll die Uhrzeit stehen"),
+      body: Center(
+        child: StreamBuilder<DateTime>(
+          stream: time,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return const Icon(Icons.error);
+            } else if (snapshot.hasData) {
+              final time = snapshot.data;
+
+              return Text('zeit: $time');
+            } else {
+              return const Icon(Icons.error);
+            }
+          },
+        ),
       ),
     );
   }
