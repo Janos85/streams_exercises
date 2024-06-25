@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:streams_exercises/features/numbers/number_repository.dart';
 
-class NumberScreen extends StatelessWidget {
+class NumberScreen extends StatefulWidget {
   const NumberScreen({
     super.key,
     required this.numberRepository,
@@ -10,32 +10,34 @@ class NumberScreen extends StatelessWidget {
   final NumberRepository numberRepository;
 
   @override
+  State<NumberScreen> createState() => _NumberScreenState();
+}
+
+class _NumberScreenState extends State<NumberScreen> {
+  final Stream<int> numbers = NumberRepository().getNumberStream();
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Number Screen'),
       ),
-      body: StreamBuilder<List<int>>(
-        stream: numberRepository.getNumberStream,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No numbers available'));
-          } else {
-            final numbers = snapshot.data!;
-            return ListView.builder(
-              itemCount: numbers.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(numbers[index].toString()),
-                );
-              },
-            );
-          }
-        },
+      body: Center(
+        child: StreamBuilder<int>(
+          stream: numbers,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return const Icon(Icons.error);
+            } else if (snapshot.hasData) {
+              final numbers = snapshot.data;
+
+              return Text('Nummern: $numbers');
+            } else {
+              return const Icon(Icons.error);
+            }
+          },
+        ),
       ),
     );
   }
