@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:streams_exercises/features/chat/chat_message.dart';
 
-const messageInterval = Duration(seconds: 4);
+const messageInterval = Duration(seconds: 2);
 
 class ChatRepository {
   final StreamController<ChatMessage> _controller =
